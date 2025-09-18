@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const session = require('express-session');
 const path = require('path');
+
 require('dotenv').config();
 
 const app = express();
@@ -15,13 +16,42 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Session setup
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+// Session setup - UPDATED with timeout
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'dev-secret',
+  secret: process.env.SESSION_SECRET || 'dev-secret', // keep secret in .env
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // true only in production with HTTPS
+  cookie: { 
+    secure: false, // set true in production with HTTPS
+    maxAge: 15 * 60 * 1000 // 15 minutes for testing
+  }
 }));
+
+// Session timeout middleware - ADD THIS
+app.use((req, res, next) => {
+  // Routes that don't require authentication
+  const publicRoutes = ['/', '/users/login', '/users/register', '/password/forgot'];
+  const isPublicRoute = publicRoutes.includes(req.path) || 
+                       req.path.startsWith('/password/reset/') ||
+                       req.path.startsWith('/users/verify/');
+  
+  if (!isPublicRoute) {
+    // Check if user session exists
+    if (!req.session.user) {
+      return res.redirect('/users/login?expired=true');
+    }
+    
+    // Update session activity timestamp
+    req.session.lastActivity = Date.now();
+  }
+  
+  next();
+});
 
 // MongoDB Setup
 const uri = process.env.MONGO_URI;
@@ -32,27 +62,27 @@ app.locals.client = client;
 app.locals.dbName = process.env.DB_NAME || "ecommerceDB";
 
 // Routes
+const indexRoute = require('./routes/index');
 const usersRoute = require('./routes/users');
-app.use('/users', usersRoute);
+const passwordRoute = require('./routes/password');
 
-// Optional: handle root `/`
-app.get('/', (req, res) => {
-  res.send('<h1>Welcome to Ecommerce App</h1><p><a href="/users/list">View Users</a></p>');
-});
+app.use('/', indexRoute);
+app.use('/users', usersRoute);
+app.use('/password', passwordRoute);
 
 // Updated server startup with MongoDB connection
 async function main() {
   try {
     await client.connect();
-    console.log("✅ Connected to MongoDB Atlas");
+    console.log("Connected to MongoDB Atlas");
+    
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   } catch (err) {
-    console.error("❌ MongoDB connection failed:", err.message);
+    console.error("MongoDB connection failed", err);
   }
-
-  // Always start the server (even if DB fails)
-  app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  });
 }
 
 main();
