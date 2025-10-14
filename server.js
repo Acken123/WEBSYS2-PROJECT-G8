@@ -20,62 +20,57 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Session setup - UPDATED with timeout
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'dev-secret', // keep secret in .env
+  secret: process.env.SESSION_SECRET || 'dev-secret',
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production', // true in production with HTTPS
-    maxAge: 15 * 60 * 1000 // 15 minutes for testing
+    secure: process.env.NODE_ENV === 'production', 
+    maxAge: 15 * 60 * 1000 // 15 minutes
   }
 }));
 
-// Make user available to all views (must be before routes)
+// Make user available to all views
 app.use((req, res, next) => {
   res.locals.user = req.session?.user || null;
   next();
 });
 
-// Session timeout middleware - ENHANCED
+// Session timeout middleware
 app.use((req, res, next) => {
-  // Routes that don't require authentication
   const publicRoutes = [
-    '/', 
-    '/users/login', 
-    '/users/register', 
+    '/',
+    '/users/login',
+    '/users/register',
     '/password/forgot',
-    '/health', // health check endpoint
-    '/styles/', // Allow static files
-    '/scripts/',
-    '/images/'
+    '/health'
   ];
-  
-  const isPublicRoute = publicRoutes.some(route => req.path.startsWith(route)) || 
-                       req.path.startsWith('/password/reset/') ||
-                       req.path.startsWith('/users/verify/');
-  
+
+  const isPublicRoute = publicRoutes.some(route => req.path.startsWith(route)) ||
+                        req.path.startsWith('/password/reset/') ||
+                        req.path.startsWith('/users/verify/') ||
+                        req.path.startsWith('/styles/') ||
+                        req.path.startsWith('/scripts/') ||
+                        req.path.startsWith('/images/');
+
   if (!isPublicRoute) {
-    // Check if user session exists
     if (!req.session.user) {
       return res.redirect('/users/login?expired=true');
     }
-    
-    // Check for session timeout (15 minutes of inactivity)
+
     const now = Date.now();
     const lastActivity = req.session.lastActivity || now;
-    const timeoutDuration = 15 * 60 * 1000; // 15 minutes
-    
+    const timeoutDuration = 15 * 60 * 1000;
+
     if (now - lastActivity > timeoutDuration) {
-      // Session expired due to inactivity
-      req.session.destroy((err) => {
+      req.session.destroy(err => {
         if (err) console.error("Session destruction error:", err);
       });
       return res.redirect('/users/login?expired=true');
     }
-    
-    // Update session activity timestamp
+
     req.session.lastActivity = now;
   }
-  
+
   next();
 });
 
@@ -87,6 +82,29 @@ const client = new MongoClient(uri);
 app.locals.client = client;
 app.locals.dbName = process.env.DB_NAME || "ecommerceDB";
 
+// Serve static files before routes
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.type('text').send('ok');
+});
+
+// Crash test routes
+app.get('/crash', (req, res, next) => {
+  // Forward the error to Express's error handler
+  next(new Error('Test crash'));
+});
+
+app.get('/crash-async', async (req, res, next) => {
+  try {
+    throw new Error('Async crash');
+  } catch (err) {
+    next(err); // correctly passes to error handler
+  }
+});
+
+
 // Routes
 const indexRoute = require('./routes/index');
 const usersRoute = require('./routes/users');
@@ -96,76 +114,54 @@ app.use('/', indexRoute);
 app.use('/users', usersRoute);
 app.use('/password', passwordRoute);
 
-// Serve static files from public directory (before 404)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Health check endpoint for monitoring
-app.get('/health', (req, res) => {
-  res.type('text').send('ok');
-});
-
-// Log 404s for debugging (optional but helpful)
-app.use((req, res, next) => {
-  if (!res.headersSent) {
-    console.warn('404:', req.method, req.originalUrl, 'Referrer:', req.get('referer') || '-');
-  }
-  next();
-});
-
 // 404 handler (must be after all routes and static files)
-app.use((req, res, next) => {
-  // Check if this is an API request
+app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ 
-      error: 'Not Found', 
-      path: req.path 
-    });
+    return res.status(404).json({ error: 'Not Found', path: req.path });
   }
-  
-  // Prevent caching of 404 pages
+
   res.set('Cache-Control', 'no-store');
   res.status(404).render('404', { title: 'Page Not Found' });
 });
 
-// 500 Error handling middleware (must be last)
+// 500 error handler (must be last)
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  
-  // Check if this is an API request
+  console.error('Error:', err.stack || err);
+
   if (req.path.startsWith('/api/')) {
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Internal Server Error',
       message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message
     });
   }
-  
-  // Render 500 page for regular requests
+
+  if (res.headersSent) return next(err);
+
   res.status(500).render('500', { 
     title: 'Server Error',
     message: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message
   });
 });
 
-// Updated server startup with MongoDB connection
+// MongoDB connection + server startup
 async function main() {
   try {
     await client.connect();
-    console.log("Connected to MongoDB Atlas");
-    
-    // Start server
+    console.log("✅ Connected to MongoDB Atlas");
+
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (err) {
-    console.error("MongoDB connection failed", err);
+    console.error("❌ MongoDB connection failed:", err);
     process.exit(1);
   }
 }
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
-  console.log('Shutting down gracefully...');
+  console.log('🛑 Shutting down gracefully...');
   await client.close();
   process.exit(0);
 });
