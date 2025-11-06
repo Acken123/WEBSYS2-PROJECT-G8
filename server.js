@@ -167,3 +167,8 @@ process.on('SIGINT', async () => {
 });
 
 main();
+
+// view engine (ensure this exists)
+app.set('view engine', 'ejs');
+// serve /public as static
+app.use('/public', express.static('public'));
