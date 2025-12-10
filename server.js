@@ -18,6 +18,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// ✅ ADD STATIC FILES HERE
+// view engine (ensure this exists)
+app.set('view engine', 'ejs');
+// serve /public as static
+app.use('/public', express.static('public'));
+// ✅ END ADDED PART
+
 // Session setup - UPDATED with timeout
 app.use(session({
   secret: process.env.SESSION_SECRET || 'dev-secret',
@@ -92,7 +99,6 @@ app.get('/health', (req, res) => {
 
 // Crash test routes
 app.get('/crash', (req, res, next) => {
-  // Forward the error to Express's error handler
   next(new Error('Test crash'));
 });
 
@@ -100,10 +106,9 @@ app.get('/crash-async', async (req, res, next) => {
   try {
     throw new Error('Async crash');
   } catch (err) {
-    next(err); // correctly passes to error handler
+    next(err);
   }
 });
-
 
 // Routes
 const indexRoute = require('./routes/index');
@@ -114,7 +119,7 @@ app.use('/', indexRoute);
 app.use('/users', usersRoute);
 app.use('/password', passwordRoute);
 
-// 404 handler (must be after all routes and static files)
+// 404 handler
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'Not Found', path: req.path });
@@ -124,7 +129,7 @@ app.use((req, res) => {
   res.status(404).render('404', { title: 'Page Not Found' });
 });
 
-// 500 error handler (must be last)
+// 500 handler
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack || err);
 
@@ -159,7 +164,6 @@ async function main() {
   }
 }
 
-// Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('🛑 Shutting down gracefully...');
   await client.close();
@@ -167,8 +171,3 @@ process.on('SIGINT', async () => {
 });
 
 main();
-
-// view engine (ensure this exists)
-app.set('view engine', 'ejs');
-// serve /public as static
-app.use('/public', express.static('public'));
