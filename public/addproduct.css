@@ -1,0 +1,463 @@
+
+    /* ================================
+       PROFILE CONTAINER
+       ================================ */
+
+    .profile-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    /* ================================
+       CONTAINER
+       ================================ */
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 40px rgba(76, 201, 240, 0.3);
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: var(--accent-blue);
+      text-shadow: 0 0 15px #4cc9f0aa;
+      text-align: center;
+    }
+
+    /* ================================
+       FORM STYLES
+       ================================ */
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--accent-green);
+      font-size: 1rem;
+    }
+
+input, textarea, select {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--text-light);
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa3b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+select option {
+  background: #0d1b2a;
+  color: #ffffff;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+    input[type="file"] {
+      padding: 12px;
+    }
+
+    /* ================================
+       DROP ZONE STYLES
+       ================================ */
+
+    .drop-zone {
+      border: 2px dashed var(--accent-blue);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .drop-zone:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-green);
+    }
+
+    .drop-zone.dragover {
+      background: rgba(76, 201, 240, 0.1);
+      border-color: var(--accent-green);
+      transform: scale(1.02);
+    }
+
+    .drop-zone-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .drop-zone-text {
+      margin: 0;
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    .drop-zone-subtext {
+      margin: 10px 0 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ================================
+       IMAGE UPLOAD PREVIEW
+       ================================ */
+
+    .image-preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .image-preview {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      transition: all 0.3s ease;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid var(--glass-border);
+      transition: all 0.3s ease;
+    }
+
+    .image-preview:hover img {
+      transform: scale(1.05);
+      border-color: var(--accent-blue);
+    }
+
+    .remove-image {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff6b6b;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .image-preview:hover .remove-image {
+      opacity: 1;
+    }
+
+    .remove-image:hover {
+      background: #ff5252;
+      transform: scale(1.1);
+    }
+
+   
+
+    /* ================================
+       RESPONSIVE
+       ================================ */
+
+    @media (max-width: 768px) {
+      .profile-container {
+        padding: 60px 15px 20px;
+      }
+      
+      .container {
+        padding: 30px 20px;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      .drop-zone {
+        padding: 30px 20px;
+      }
+      
+      .drop-zone-icon {
+        font-size: 2.5rem;
+      }
+    }
+    /* ================================
+   ENHANCED BUTTON STYLES
+   ================================ */
+
+/* Save Profile Button */
+button[type="submit"] {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(76, 201, 240, 0.3), rgba(79, 232, 176, 0.3));
+  border: 1px solid var(--accent-blue);
+  padding: 16px;
+  color: var(--text-light);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 20px rgba(76, 201, 240, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  margin-top: 15px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.5px;
+}
+
+button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, rgba(76, 201, 240, 0.4), rgba(79, 232, 176, 0.4));
+  transform: translateY(-3px);
+  box-shadow: 
+    0 8px 25px rgba(76, 201, 240, 0.5),
+    0 0 30px rgba(79, 232, 176, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  letter-spacing: 1px;
+}
+
+button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+button[type="submit"]:active {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 15px rgba(76, 201, 240, 0.4),
+    0 0 20px rgba(79, 232, 176, 0.2);
+}
+
+/* Update Password Button Specific Styles */
+#passwordForm button[type="submit"] {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(254, 202, 87, 0.3));
+  border: 1px solid var(--accent-purple);
+  box-shadow: 
+    0 0 20px rgba(157, 78, 221, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#passwordForm button[type="submit"]:hover {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(254, 202, 87, 0.4));
+  box-shadow: 
+    0 8px 25px rgba(157, 78, 221, 0.5),
+    0 0 30px rgba(254, 202, 87, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+#passwordForm button[type="submit"]:active {
+  box-shadow: 
+    0 4px 15px rgba(157, 78, 221, 0.4),
+    0 0 20px rgba(254, 202, 87, 0.2);
+}
+
+/* Button Icons */
+button[type="submit"]::after {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+button[type="submit"]:hover::after {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Button Loading State */
+button[type="submit"].loading {
+  position: relative;
+  color: transparent;
+}
+
+button[type="submit"].loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Button Focus Effects */
+button[type="submit"]:focus {
+  outline: none;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 
+      0 0 20px rgba(76, 201, 240, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(76, 201, 240, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 0 20px rgba(76, 201, 240, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Button Disabled State */
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 0 15px rgba(156, 163, 175, 0.3) !important;
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.2), rgba(107, 114, 128, 0.2)) !important;
+  border-color: #9ca3af !important;
+}
+
+/* Button Container for Better Spacing */
+.form-section button {
+  margin-top: 25px;
+}
+
+/* Success Button Animation */
+button[type="submit"].success {
+  background: linear-gradient(135deg, rgba(79, 232, 176, 0.4), rgba(120, 224, 143, 0.4)) !important;
+  border-color: var(--accent-green) !important;
+  animation: successPulse 1s ease;
+}
+
+@keyframes successPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(79, 232, 176, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(79, 232, 176, 0.7);
+  }
+}
+
+/* Responsive Button Styles */
+@media (max-width: 768px) {
+  button[type="submit"] {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  button[type="submit"] {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+}
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+  .back {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      background: rgba(157, 78, 221, 0.2);
+      border: 1px solid var(--accent-purple);
+      border-radius: 12px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
+      width: auto;
+      align-self: center;
+    }
+
+    .back:hover {
+      background: rgba(157, 78, 221, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(157, 78, 221, 0.5);
+    }
+        .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }

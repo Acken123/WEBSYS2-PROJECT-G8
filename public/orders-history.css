@@ -1,0 +1,629 @@
+
+
+/* ================================
+   PROFILE CONTAINER
+   ================================ */
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 20px;
+  min-height: calc(100vh - 80px);
+}
+
+
+/* ================================
+   CONTAINER
+   ================================ */
+
+/* ================================
+   CONTAINER - WIDER
+   ================================ */
+
+.container {
+  width: 100%;
+  max-width: 1400px; /* CHANGED from 1200px to 1400px */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(76, 201, 240, 0.3);
+}
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: var(--accent-blue);
+  text-shadow: 0 0 15px #4cc9f0aa;
+  text-align: center;
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.btn-primary {
+  background: rgba(76, 201, 240, 0.2);
+  color: var(--text-light);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+}
+
+.btn-primary:hover {
+  background: rgba(76, 201, 240, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(76, 201, 240, 0.5);
+}
+
+.btn-danger {
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--text-light);
+  border-color: var(--danger-red);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+.btn-danger:hover {
+  background: rgba(255, 107, 107, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+}
+
+/* ================================
+   TABLE STYLES
+   ================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+th {
+  color: var(--accent-blue);
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+tr {
+  transition: all 0.3s ease;
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(5px);
+}
+
+/* ================================
+   STATUS BADGES
+   ================================ */
+
+.status {
+  font-weight: 600;
+  text-transform: capitalize;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+
+
+.status.pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+.status.to_pay {
+  background: rgba(79, 232, 176, 0.2);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.status.paid {
+  background: rgba(85, 0, 243, 0.2);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+}
+
+.status.shipped {
+  background: rgba(157, 78, 221, 0.2);
+  color: var(--accent-purple);
+  border: 1px solid var(--accent-purple);
+}
+
+.status.delivered {
+  background: rgba(79, 232, 176, 0.3);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.status.cancelled {
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--danger-red);
+  border: 1px solid var(--danger-red);
+}
+
+.status.completed {
+  background: rgba(255, 193, 7, 0.2);
+  color: #00ff62;
+  border: 1px solid #07ff30;
+}
+
+.status.return_requested {
+  background: rgba(119, 216, 255, 0.2);
+  color: #00ffc8;
+  border: 1px solid #7bffe9;
+}
+
+.status.refund {
+  background: rgba(0, 183, 255, 0.2);
+  color: #00f7ff;
+  border: 1px solid #00b7ff;
+}
+
+.status.refunded {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+}
+
+/* ================================
+   PAYMENT METHOD BADGES
+   ================================ */
+
+.payment-method {
+  font-weight: 600;
+  padding: 6px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: inline-block;
+  width: 125px;
+}
+
+.payment-method.gcash {
+  background: rgba(79, 232, 176, 0.2);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.payment-method.cash, 
+.payment-method.cod {
+  background: rgba(255, 193, 7, 0.2);
+  color: #f8f405;
+  border: 1px solid #fc7d4aec;
+}
+
+/* ================================
+   DATE FORMATTING
+   ================================ */
+
+.order-date {
+  color: var(--text-light);
+  font-size: 0.8rem;  /* Change from 0.9rem to 0.8rem */
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+/* ================================
+   EMPTY STATE
+   ================================ */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 60px 15px 20px;
+  }
+  
+  .container {
+    padding: 30px 20px;
+    overflow-x: auto;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  table {
+    min-width: 800px;
+  }
+  
+  th, td {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .back-btn {
+    top: 15px;
+    left: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 15px;
+  }
+  
+  h1 {
+    font-size: 1.6rem;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: rgba(157, 78, 221, 0.2);
+  border: 1px solid var(--accent-purple);
+  border-radius: 12px;
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
+  width: auto;
+  align-self: center;
+}
+
+.back:hover {
+  background: rgba(157, 78, 221, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(157, 78, 221, 0.5);
+}
+
+/* Additional styles for the view button and table enhancements */
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: rgba(76, 201, 240, 0.2);
+  color: var(--text-light);
+  border: 1px solid var(--accent-blue);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
+}
+
+.btn-view:hover {
+  background: rgba(76, 201, 240, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(76, 201, 240, 0.5);
+}
+
+.btn-admin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: rgba(157, 78, 221, 0.2);
+  color: var(--text-light);
+  border: 1px solid var(--accent-purple);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+}
+
+.btn-admin:hover {
+  background: rgba(157, 78, 221, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+}
+
+.customer-info {
+  font-size: 0.9rem;
+}
+
+.customer-name {
+  font-weight: 600;
+  color: var(--accent-green);
+  margin-bottom: 4px;
+}
+
+.customer-email {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.customer-id {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+.order-id {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--accent-blue);
+}
+
+.order-name {
+  font-weight: 500;
+}
+
+.order-total {
+  font-weight: 600;
+  color: var(--accent-green);
+  font-size: 1.1rem;
+}
+
+/* Ensure table is wide enough */
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+th:nth-child(1), /* Customer */
+th:nth-child(2), /* Order ID */
+th:nth-child(3), /* Order Name */
+th:nth-child(4), /* Total */
+th:nth-child(5), /* Payment Method */
+th:nth-child(6), /* Status */
+th:nth-child(7), /* Date */
+th:nth-child(8) { /* Actions */
+  width: auto;
+}
+
+/* Make actions column flexible */
+th:last-child,
+td:last-child {
+  width: 180px;
+  min-width: 180px;
+}
+/* ================================
+   TABLE COLUMN WIDTHS - FIXED
+   ================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed; /* Keep this for consistent widths */
+}
+
+th, td {
+  padding: 16px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+  vertical-align: top;
+}
+
+/* Specific column widths */
+th:nth-child(1), /* Customer (admin only) or Order ID */
+td:nth-child(1) {
+  width: 200px; /* Wider for customer info or order ID */
+  min-width: 200px;
+  max-width: 200px;
+}
+
+th:nth-child(2), /* Order ID or Order Name */
+td:nth-child(2) {
+  width: 180px; /* Order ID column */
+  min-width: 180px;
+  max-width: 180px;
+}
+
+th:nth-child(3), /* Order Name or Total */
+td:nth-child(3) {
+  width: 200px; /* Order Name column */
+  min-width: 200px;
+  max-width: 200px;
+}
+
+th:nth-child(4), /* Total or Payment Method */
+td:nth-child(4) {
+  width: 120px; /* Total column */
+  min-width: 120px;
+  max-width: 120px;
+}
+
+th:nth-child(5), /* Payment Method or Status */
+td:nth-child(5) {
+  width: 140px; /* Payment Method column */
+  min-width: 140px;
+  max-width: 140px;
+}
+
+th:nth-child(6), /* Status or Date */
+td:nth-child(6) {
+  width: 140px; /* Status column */
+  min-width: 140px;
+  max-width: 140px;
+}
+
+th:nth-child(7), /* Date or Actions */
+td:nth-child(7) {
+  width: 180px; /* Date column - WIDER for date/time */
+  min-width: 180px;
+  max-width: 180px;
+}
+
+th:nth-child(8), /* Actions (when admin view) */
+td:nth-child(8) {
+  width: 150px; /* Actions column */
+  min-width: 150px;
+  max-width: 150px;
+}
+
+/* For admin view (more columns) adjust widths */
+/* When admin view has 8 columns */
+table thead tr th:nth-child(8):last-child,
+table tbody tr td:nth-child(8):last-child {
+  width: 180px; /* Slightly wider for actions in admin view */
+  min-width: 180px;
+  max-width: 180px;
+}
+
+/* Date styling to fit better */
+.order-date {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 1.4;
+}
+
+/* Make table scrollable on small screens */
+@media (max-width: 1024px) {
+  .container {
+    overflow-x: auto;
+  }
+  
+  table {
+    min-width: 1000px; /* Ensure table is wide enough */
+  }
+}
+
+/* Adjust for admin view which has more columns */
+@media (max-width: 1200px) {
+  table {
+    min-width: 1100px; /* Even wider for admin view */
+  }
+}
+
+/* Customer info adjustments */
+.customer-info {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  min-width: 180px;
+}
+
+.customer-name {
+  font-weight: 600;
+  color: var(--accent-green);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customer-email {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customer-id {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Order ID adjustments */
+.order-id {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--accent-blue);
+  word-break: break-all;
+  display: block;
+  line-height: 1.4;
+}
+
+/* Order name adjustments */
+.order-name {
+  font-weight: 500;
+  display: block;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Ensure no text overflow */
+th, td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  th, td {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .order-date {
+    font-size: 0.8rem;
+  }
+  
+  .customer-info {
+    font-size: 0.85rem;
+  }
+}

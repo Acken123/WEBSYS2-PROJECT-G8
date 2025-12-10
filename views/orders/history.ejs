@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders</title>
+    <link rel="stylesheet" href="/history.css">
+
+
+
+</head>
+
+<body>
+
+  <h1>📦 My Order History</h1>
+
+  <div class="orders-container">
+
+    <% if (orders.length === 0) { %>
+      <p style="text-align:center; font-size:1.2rem; color:#9aa3b2;">
+        You haven't placed any orders yet.
+      </p>
+    <% } else { %>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>View</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% orders.forEach(order => { %>
+            <tr>
+              <td><%= order.orderId %></td>
+
+              <td>₱<%= order.totalAmount.toFixed(2) %></td>
+
+              <td>
+                <span class="status <%= order.orderStatus %>">
+                  <%= order.orderStatus.replace("_", " ").toUpperCase() %>
+                </span>
+              </td>
+
+              <td><%= new Date(order.createdAt).toLocaleString() %></td>
+
+              <td>
+                <a class="view-btn" href="/orders/view/<%= order.orderId %>">
+                  🔍 View
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+
+      </table>
+
+    <% } %>
+  </div>
+
+</body>
+</html>

@@ -1,26 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt'); // Add this import
-const saltRounds = 12; // Add this constant
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 
 const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Show forgot password form
+// ================== SHOW FORGOT PASSWORD FORM ==================
 router.get('/forgot', (req, res) => {
   res.render('forgot-password', { title: "Forgot Password" });
 });
 
-// Handle forgot password form submission
+// ================== HANDLE FORGOT PASSWORD ==================
 router.post('/forgot', async (req, res) => {
   try {
-    // Initialize Resend here where env vars are guaranteed to be loaded
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    
     const db = req.app.locals.client.db(req.app.locals.dbName);
     const usersCollection = db.collection('users');
 
-    // Find user by email
     const user = await usersCollection.findOne({ email: req.body.email });
     if (!user) {
       return res.send("No account found with this email.");
@@ -30,17 +27,15 @@ router.post('/forgot', async (req, res) => {
     const token = uuidv4();
     const expiry = new Date(Date.now() + 3600000);
 
-    // Save token in database
     await usersCollection.updateOne(
       { email: user.email },
       { $set: { resetToken: token, resetExpiry: expiry } }
     );
 
-    // Build reset URL
     const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     const resetUrl = `${baseUrl}/password/reset/${token}`;
 
-    // Send email with Resend
+    // Send email
     await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to: user.email,
@@ -59,18 +54,17 @@ router.post('/forgot', async (req, res) => {
   }
 });
 
-// Show reset password form
+// ================== SHOW RESET PASSWORD FORM ==================
 router.get('/reset/:token', (req, res) => {
   res.render('reset-password', { title: "Reset Password", token: req.params.token });
 });
 
-// Handle reset password form
+// ================== HANDLE RESET PASSWORD ==================
 router.post('/reset/:token', async (req, res) => {
   try {
     const db = req.app.locals.client.db(req.app.locals.dbName);
     const usersCollection = db.collection('users');
 
-    // Find user by token and make sure it's not expired
     const user = await usersCollection.findOne({
       resetToken: req.params.token,
       resetExpiry: { $gt: new Date() }
@@ -80,15 +74,12 @@ router.post('/reset/:token', async (req, res) => {
       return res.send("Reset link is invalid or has expired.");
     }
 
-    // Check if passwords match
     if (req.body.password !== req.body.confirm) {
       return res.send("Passwords do not match.");
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
-    // Update password in DB, clear token and expiry
     await usersCollection.updateOne(
       { email: user.email },
       {
@@ -97,11 +88,9 @@ router.post('/reset/:token', async (req, res) => {
       }
     );
 
-    res.send(`
-      <h2>Password Reset Successful!</h2>
-      <p>Your password has been reset successfully. You can now log in with your new password.</p>
-      <p><a href="/users/login">Go to Login</a></p>
-    `);
+    // ✅ Redirect back to login with a success flag
+    res.redirect('/users/login?reset=1');
+
   } catch (err) {
     console.error("Error resetting password:", err);
     res.send("Something went wrong.");

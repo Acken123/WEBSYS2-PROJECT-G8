@@ -3,23 +3,35 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "20": "^3.1.9",
     "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.2",
-    "body-parser": "^2.2.0",
-    "dotenv": "^17.2.1",
+    "body-parser": "^2.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "express-session": "^1.18.2",
-    "mongodb": "^6.19.0",
+    "mongodb": "^6.21.0",
+    "mongoose": "^8.20.0",
+    "multer": "^2.0.2",
+    "node-fetch": "^2.7.0",
     "resend": "^6.0.3",
-    "uuid": "^11.1.0"
-  }
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JavierBSCS/ws2-ecommerce-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JavierBSCS/ws2-ecommerce-project/issues"
+  },
+  "homepage": "https://github.com/JavierBSCS/ws2-ecommerce-project#readme",
+  "description": ""
 }

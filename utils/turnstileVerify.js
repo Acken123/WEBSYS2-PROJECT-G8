@@ -1,6 +1,6 @@
-const fetch = require('node-fetch'); // Install if Node < 18
+const fetch = require('node-fetch'); // Install if Node version < 18
 
-// Function to verify Cloudflare Turnstile response
+// ✅ Function to verify Cloudflare Turnstile response
 async function verifyTurnstile(token, ip) {
   const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
@@ -11,7 +11,7 @@ async function verifyTurnstile(token, ip) {
       remoteip: ip
     })
   });
-  
+
   return response.json();
 }
 

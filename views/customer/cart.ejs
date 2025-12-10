@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="/cart.css">
+</head>
+<body>
+
+<div class="profile-container">
+  <!-- Home button outside container - positioned exactly like profile page -->
+  <div class="back-btn">
+    <a href="/users/dashboard" class="btn btn-primary">🏠 Home</a>
+  </div>
+
+  <div class="cart-container">
+    <h1>🛒 Your Cart</h1>
+
+    <% if (cart.length === 0) { %>
+      <div class="empty-cart">
+        <p>Your cart is empty.</p>
+        <a href="/users/dashboard" class="btn btn-primary" style="margin-top: 20px;">Continue Shopping</a>
+      </div>
+    <% } else { %>
+
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+
+          <% cart.forEach(item => { %>
+            <tr>
+              <td class="product-name"><%= item.name %></td>
+              <td class="product-price">₱<%= item.price %></td>
+              <td>
+                <div class="quantity-controls">
+                  <form method="POST" action="/cart/decrease/<%= item.productId %>" class="qty-form">
+                    <button type="submit" class="qty-btn decrease" title="Decrease Quantity">−</button>
+                  </form>
+                  
+                  <span class="product-qty"><%= item.qty %></span>
+                  
+                  <form method="POST" action="/cart/increase/<%= item.productId %>" class="qty-form">
+                    <button type="submit" class="qty-btn" title="Increase Quantity">+</button>
+                  </form>
+                </div>
+              </td>
+              <td class="item-total">₱<%= (item.price * item.qty).toFixed(2) %></td>
+              <td>
+                <form method="POST" action="/cart/remove/<%= item.productId %>" class="qty-form">
+                  <button type="submit" class="qty-btn remove" title="Remove Item">🗑️</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </table>
+      </div>
+
+      <!-- Totals Section -->
+      <div class="totals-section">
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span>₱<%= subtotal %></span>
+        </div>
+        <div class="total-row">
+          <span>Tax (12%):</span>
+          <span>₱<%= tax %></span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total:</span>
+          <span>₱<%= total %></span>
+        </div>
+      </div>
+
+      <div class="checkout-section">
+        <div class="button-group">
+          <a href="/users/dashboard" class="btn btn-primary shop-more-btn">🛍️ Shop More</a>
+          
+          <!-- CHANGED: Go to checkout page instead of directly to orders -->
+          <a href="/checkout" class="btn btn-success">🚀 Proceed to Checkout</a>
+        </div>
+      </div>
+
+    <% } %>
+  </div>
+</div>
+
+</body>
+</html>

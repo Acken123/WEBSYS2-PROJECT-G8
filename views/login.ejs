@@ -4,80 +4,221 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/login.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-          <a class="navbar-brand" href="/">WS2 E-Commerce</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-              <ul class="navbar-nav">
-                  <li class="nav-item">
-                      <a class="nav-link" href="/">Home</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="/about">About</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="btn btn-primary ms-2 active" href="/login">Login</a>
-                  </li>
-              </ul>
-          </div>
-      </div>
-  </nav>
 
-  <!-- Login Content -->
-  <div class="auth-container">
-      <div class="auth-card">
-          <div class="auth-header">
-              <div class="sidebar-logo" style="margin: 0 auto 1rem;">
-                  <i class="fas fa-user-shield"></i>
-              </div>
-              <h1 class="auth-title">Welcome Back</h1>
-              <p class="auth-subtitle">Sign in to your account to continue</p>
-          </div>
+  <!-- Back Button -->
+  <a href="/" class="back-btn">⬅ Back</a>
 
-          <% if (locals.message) { %>
-              <div class="message <%= message.includes('logged out') ? 'success' : 'error' %>">
-                  <i class="fas fa-<%= message.includes('logged out') ? 'check-circle' : 'exclamation-circle' %>"></i>
-                  <%= message %>
-              </div>
-          <% } %>
+  <div class="login-container">
 
-          <form class="auth-form" action="/users/login" method="POST">
-              <div class="form-group">
-                  <label for="email" class="form-label">
-                      <i class="fas fa-envelope me-2"></i>Email Address
-                  </label>
-                  <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-              </div>
+    <h1 class="title">Login</h1>
 
-              <div class="form-group mt-3">
-                  <label for="password" class="form-label">
-                      <i class="fas fa-lock me-2"></i>Password
-                  </label>
-                  <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-              </div>
-
-              <button type="submit" class="btn btn-primary w-100 mt-4">
-                  <i class="fas fa-sign-in-alt me-2"></i>Sign In
+    <!-- Error Message Display -->
+    <% if (error) { %>
+      <div class="message error">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span style="flex: 1;"><%= error.replace(/<[^>]*>/g, '').replace(/⚠️\s*/, '') %></span>
+        </div>
+        
+        <% if (error.includes('inactive')) { %>
+          <div style="text-align: center; margin-top: 10px;">
+            <% const emailMatch = error.match(/showReactivationModal\('([^']+)'\)/); %>
+            <% if (emailMatch && emailMatch[1]) { %>
+              <button type="button" onclick="showReactivationModal('<%= emailMatch[1] %>')" 
+                      class="btn btn-secondary" style="margin-top: 10px; background: #4cc9f0; color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                <i class="fas fa-user-check"></i> Request Reactivation
               </button>
-          </form>
-
-          <div class="auth-links mt-3 text-center">
-              <p><a href="/password/forgot">Forgot your password?</a></p>
-              <p>Don't have an account? <a href="/users/register">Create one here</a></p>
+            <% } %>
           </div>
+        <% } %>
       </div>
+    <% } %>
+
+    <% if (expired) { %>
+      <div class="message expired">⚠️ Your session has expired. Please login again.</div>
+    <% } %>
+
+    <% if (logout) { %>
+      <div class="message logout">✅ You have been logged out successfully.</div>
+    <% } %>
+
+    <% if (reset) { %>
+      <div class="message reset">🔑 Your password has been reset. Please log in with your new password.</div>
+    <% } %>
+
+    <form action="/users/login" method="POST">
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-with-icon">
+          <input type="password" name="password" id="password" placeholder="Enter your password" required>
+          <span class="password-toggle" id="togglePassword" title="Show password">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+      </div>
+
+      <p class="forgot-link"><a href="/password/forgot">Forgot Password?</a></p>
+
+      <!-- Cloudflare Turnstile -->
+      <div class="cf-turnstile" data-sitekey="<%= process.env.TURNSTILE_SITEKEY %>"></div>
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <p class="register-link">
+      Don't have an account? <a href="/users/register">Register here</a>
+    </p>
+
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Turnstile Script -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <!-- Reactivation Modal -->
+  <div id="reactivationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3><i class="fas fa-user-slash"></i> Account Inactive</h3>
+      <p>Your account has been deactivated. Would you like to request reactivation?</p>
+      
+      <form id="reactivationForm">
+        <div class="form-group">
+          <label for="reactivationEmail">Your Email</label>
+          <input type="email" id="reactivationEmail" name="email" required readonly>
+        </div>
+        
+        <div class="form-group">
+          <label for="reactivationReason">Reason for Reactivation (Optional)</label>
+          <textarea id="reactivationReason" name="reason" 
+                    placeholder="Please tell us why you'd like to reactivate your account..."
+                    rows="3"></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeReactivationModal()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Send Reactivation Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Password toggle functionality
+    const passwordInput = document.getElementById('password');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+
+    function togglePasswordVisibility() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      // Toggle icon and title
+      const icon = togglePasswordBtn.querySelector('i');
+      if (type === 'text') {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+        togglePasswordBtn.setAttribute('title', 'Hide password');
+      } else {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+        togglePasswordBtn.setAttribute('title', 'Show password');
+      }
+    }
+
+    // Event listener for show/hide password
+    togglePasswordBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      togglePasswordVisibility();
+    });
+
+    // Optional: Hide password when clicking outside
+    document.addEventListener('click', (e) => {
+      // Change from '.show-hide-toggle' to '.password-toggle'
+      if (!e.target.closest('.password-toggle') && !e.target.closest('.password-toggle i')) {
+        if (passwordInput.type === 'text') {
+          passwordInput.type = 'password';
+          togglePasswordBtn.querySelector('i').classList.remove('fa-eye-slash');
+          togglePasswordBtn.querySelector('i').classList.add('fa-eye');
+          togglePasswordBtn.setAttribute('title', 'Show password');
+        }
+      }
+    });
+
+    // Also add pointer-events to make sure it's clickable
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ensure the toggle button is clickable
+      togglePasswordBtn.style.pointerEvents = 'auto';
+    });
+
+    // Reactivation Modal Functions
+    function showReactivationModal(email) {
+      document.getElementById('reactivationEmail').value = email;
+      document.getElementById('reactivationModal').style.display = 'flex';
+    }
+
+    function closeReactivationModal() {
+      document.getElementById('reactivationModal').style.display = 'none';
+      document.getElementById('reactivationForm').reset();
+    }
+
+    // Handle form submission
+    document.getElementById('reactivationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('reactivationEmail').value;
+      const reason = document.getElementById('reactivationReason').value;
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      submitBtn.disabled = true;
+      
+      try {
+        const response = await fetch('/users/request-reactivation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, reason })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('✅ Reactivation request sent! Admin will review it shortly.');
+          closeReactivationModal();
+        } else {
+          alert('❌ ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Network error. Please try again.');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('reactivationModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeReactivationModal();
+      }
+    });
+  </script>
 </body>
 </html>
